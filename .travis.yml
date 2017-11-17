@@ -8,4 +8,4 @@ cache:
 install:
   - ./gradlew clean build jacocoTestReport jacocoTestCoverageVerification
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -t 2d07accf-2040-478e-a8d3-b1e7dc6f831f
+  - bash <(curl -s https://codecov.io/bash)
