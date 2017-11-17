@@ -1,0 +1,128 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'org.hibernate.build.gradle:gradle-maven-publish-auth:2.0.1'
+        classpath 'net.linguica.gradle:maven-settings-plugin:0.5'
+        classpath 'com.benjaminsproule:swagger-gradle-plugin:+'
+    }
+}
+
+plugins {
+    id 'org.sonarqube' version '2.5'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'maven-publish-auth'
+apply plugin: 'net.linguica.maven-settings'
+apply plugin: 'com.benjaminsproule.swagger'
+
+group 'com.anigenero'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+ext {
+
+    tomcatVersion = '9.0.1'
+
+    jacksonVersion = '2.8.+'
+    jerseyExtVersion = '2.25.1'
+    hibernateVersion = '5.2.10.Final'
+    log4jVersion = '2.8.+'
+    swaggerVersion = '1.5.16'
+    weldVersion = '3.0.1.Final'
+
+    assertJVersion = '3.8.+'
+    easymockVersion = '3.4'
+    junitVersion = '4.+'
+    mockitoVersion = '2.7.22'
+
+}
+
+dependencies {
+
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
+
+    compile group: 'org.apache.tomcat', name: 'tomcat-servlet-api', version: tomcatVersion
+
+    compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: jerseyExtVersion
+
+    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: jerseyExtVersion
+    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: jerseyExtVersion
+
+    compile group: 'org.glassfish.jersey.ext', name: 'jersey-declarative-linking', version: jerseyExtVersion
+    compile group: 'org.glassfish.jersey.ext.cdi', name: 'jersey-cdi1x-servlet', version: jerseyExtVersion
+    compile(group: 'org.glassfish.jersey.ext', name: 'jersey-bean-validation', version: jerseyExtVersion) {
+        exclude group: 'org.hibernate'
+    }
+
+    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.11.6.RELEASE'
+
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.4.1.Final'
+
+    compile group: 'io.swagger', name: 'swagger-core', version: swaggerVersion
+    compile group: 'io.swagger', name: 'swagger-annotations', version: swaggerVersion
+    compileClasspath group: 'io.swagger', name: 'swagger-hibernate-validations', version: swaggerVersion
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.7.22'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
+
+}
+
+sonarqube {
+    properties {
+        property "sonar.junit.reportPath", file("$buildDir/jacoco")
+    }
+}
+
+jacoco {
+    toolVersion = '0.7.6.201602180812'
+}
+
+test {
+    jacoco {
+        excludes = ['**/Test*']
+        append = false
+        destinationFile = file("$buildDir/jacoco/jacoco.exec")
+        classDumpDir = file("$buildDir/jacoco/classpathdumps")
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/jacoco/html"
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.8
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
