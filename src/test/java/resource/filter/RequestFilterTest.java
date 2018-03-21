@@ -1,8 +1,8 @@
 package resource.filter;
 
 import com.anigenero.microservice.resource.filter.RequestFilter;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -13,17 +13,17 @@ import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Mockito.*;
 
-public class RequestFilterTest {
+class RequestFilterTest {
 
     private RequestFilter requestFilter;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.requestFilter = new RequestFilter();
     }
 
     @Test
-    public void init() throws Exception {
+    void init() throws Exception {
 
         FilterConfig filterConfig = mock(FilterConfig.class);
 
@@ -32,7 +32,7 @@ public class RequestFilterTest {
     }
 
     @Test
-    public void doFilter() throws Exception {
+    void doFilter() throws Exception {
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -48,7 +48,7 @@ public class RequestFilterTest {
     }
 
     @Test
-    public void doFilterWithError() throws Exception {
+    void doFilterWithError() throws Exception {
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -65,7 +65,7 @@ public class RequestFilterTest {
     }
 
     @Test
-    public void doFilterWithReallyLongRequestTime() throws Exception {
+    void doFilterWithReallyLongRequestTime() throws Exception {
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -85,7 +85,7 @@ public class RequestFilterTest {
     }
 
     @Test
-    public void doFilterWithLongRequestTime() throws Exception {
+    void doFilterWithLongRequestTime() throws Exception {
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -105,7 +105,7 @@ public class RequestFilterTest {
     }
 
     @Test
-    public void destroy() throws Exception {
+    void destroy() {
         this.requestFilter.destroy();
     }
 

@@ -2,17 +2,17 @@ package dto.response;
 
 import com.anigenero.microservice.model.request.PaginationRequest;
 import com.anigenero.microservice.model.response.PaginationResponse;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class PaginationResponseTest {
+class PaginationResponseTest {
 
     @Test
-    public void testPaginationResponse() throws Exception {
+    void testPaginationResponse() {
 
         final ArrayList<String> result = new ArrayList<>(Arrays.asList("1", "2"));
 
@@ -28,7 +28,7 @@ public class PaginationResponseTest {
     }
 
     @Test
-    public void testPaginationResponseNullData() throws Exception {
+    void testPaginationResponseNullData() {
 
         PaginationRequest request = new PaginationRequest();
         request.setPage(1);
@@ -42,7 +42,7 @@ public class PaginationResponseTest {
     }
 
     @Test
-    public void testPaginationResponseNoRequest() throws Exception {
+    void testPaginationResponseNoRequest() {
 
         final ArrayList<String> result = new ArrayList<>(Arrays.asList("1", "2"));
 
@@ -54,7 +54,7 @@ public class PaginationResponseTest {
     }
 
     @Test
-    public void testPaginationResponseNullRequestPage() throws Exception {
+    void testPaginationResponseNullRequestPage() {
 
         final ArrayList<String> result = new ArrayList<>(Arrays.asList("1", "2"));
 

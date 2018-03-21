@@ -2,25 +2,25 @@ package resource.mapper;
 
 import com.anigenero.microservice.model.response.ErrorResponse;
 import com.anigenero.microservice.resource.mapper.DefaultExceptionMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class DefaultExceptionMapperTest {
+class DefaultExceptionMapperTest {
 
     private DefaultExceptionMapper defaultExceptionMapper;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.defaultExceptionMapper = new DefaultExceptionMapper();
     }
 
     @Test
-    public void toResponse() throws Exception {
+    void toResponse() {
 
         final String message = "Error thrown";
 

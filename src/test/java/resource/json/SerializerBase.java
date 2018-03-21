@@ -3,10 +3,11 @@ package resource.json;
 import com.anigenero.microservice.resource.provider.ObjectMapperResolverProvider;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.lang.reflect.ParameterizedType;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class SerializerBase<T extends JsonSerializer<V>, V> {
 
@@ -15,18 +16,18 @@ public abstract class SerializerBase<T extends JsonSerializer<V>, V> {
     private T serializer;
     private ObjectMapper mapper;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "WeakerAccess"})
     public SerializerBase() {
         this.serializerClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.mapper = new ObjectMapperResolverProvider().getContext(null);
         try {
             this.serializer = this.serializerClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            Assert.fail(e.getMessage());
+            fail(e.getMessage());
         }
     }
 

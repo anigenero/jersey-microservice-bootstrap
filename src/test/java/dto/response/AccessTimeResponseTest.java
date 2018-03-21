@@ -1,14 +1,14 @@
 package dto.response;
 
 import com.anigenero.microservice.model.response.AccessTimeResponse;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class AccessTimeResponseTest {
+class AccessTimeResponseTest {
 
     @Test
-    public void getAccessed() throws Exception {
+    void getAccessed() {
 
         AccessTimeResponse<String> accessTimeResponse1 = new AccessTimeResponse<>("test");
         assertThat(accessTimeResponse1.getAccessed()).isNotNull();

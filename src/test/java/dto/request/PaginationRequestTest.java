@@ -1,15 +1,15 @@
 package dto.request;
 
 import com.anigenero.microservice.model.request.PaginationRequest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Pageable;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class PaginationRequestTest {
+class PaginationRequestTest {
 
     @Test
-    public void toPageable() throws Exception {
+    void toPageable() {
 
         PaginationRequest request = new PaginationRequest();
         request.setSize(20);
@@ -23,7 +23,7 @@ public class PaginationRequestTest {
     }
 
     @Test
-    public void isGetAll() {
+    void isGetAll() {
 
         PaginationRequest request = new PaginationRequest();
         request.setGetAll(true);
@@ -35,7 +35,7 @@ public class PaginationRequestTest {
     }
 
     @Test
-    public void defaultSize() {
+    void defaultSize() {
 
         PaginationRequest request = new PaginationRequest();
         request.setSize(null);
@@ -45,7 +45,7 @@ public class PaginationRequestTest {
     }
 
     @Test
-    public void defaultPage() {
+    void defaultPage() {
 
         PaginationRequest request = new PaginationRequest();
         request.setPage(null);

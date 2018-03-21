@@ -4,6 +4,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0'
         classpath 'org.hibernate.build.gradle:gradle-maven-publish-auth:2.0.1'
         classpath 'net.linguica.gradle:maven-settings-plugin:0.5'
         classpath 'com.benjaminsproule:swagger-gradle-plugin:+'
@@ -14,11 +15,6 @@ plugins {
     id 'org.sonarqube' version '2.5'
 }
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'jacoco'
@@ -26,7 +22,13 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'maven-publish-auth'
 apply plugin: 'net.linguica.maven-settings'
+apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'com.benjaminsproule.swagger'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
 
 group 'com.anigenero'
 version '1.0-SNAPSHOT'
@@ -37,34 +39,49 @@ ext {
 
     tomcatVersion = '9.0.1'
 
+    cdiVersion = '2.0'
+
     jacksonVersion = '2.8.+'
-    jerseyExtVersion = '2.25.1'
+    jerseyExtVersion = '2.26'
     hibernateVersion = '5.2.10.Final'
     log4jVersion = '2.8.+'
     swaggerVersion = '1.5.16'
-    weldVersion = '3.0.1.Final'
 
     assertJVersion = '3.8.+'
-    easymockVersion = '3.4'
-    junitVersion = '4.+'
+    junitVersion = '5.1.+'
     mockitoVersion = '2.7.22'
 
 }
 
 dependencies {
 
+    compileOnly group: 'org.apache.tomcat', name: 'tomcat-servlet-api', version: tomcatVersion
+
+    compileOnly group: 'javax.enterprise', name: 'cdi-api', version: cdiVersion
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
 
-    compile group: 'org.apache.tomcat', name: 'tomcat-servlet-api', version: tomcatVersion
-
-    compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: jerseyExtVersion
-
-    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: jerseyExtVersion
-    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: jerseyExtVersion
-
-    compile group: 'org.glassfish.jersey.ext', name: 'jersey-declarative-linking', version: jerseyExtVersion
-    compile group: 'org.glassfish.jersey.ext.cdi', name: 'jersey-cdi1x-servlet', version: jerseyExtVersion
+    compile 'javax.ws.rs:javax.ws.rs-api:2.1@jar'
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+    compile(group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: jerseyExtVersion) {
+        exclude group: 'javax.ws.rs'
+    }
+    compile(group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: jerseyExtVersion){
+        exclude group: 'javax.ws.rs'
+    }
+    compile(group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: jerseyExtVersion) {
+        exclude group: 'javax.ws.rs'
+    }
+    compile(group: 'org.glassfish.jersey.ext', name: 'jersey-declarative-linking', version: jerseyExtVersion) {
+        exclude group: 'javax.ws.rs'
+    }
+    compile(group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: jerseyExtVersion) {
+        exclude group: 'javax.ws.rs'
+    }
+    compile(group: 'org.glassfish.jersey.ext.cdi', name: 'jersey-cdi1x-servlet', version: jerseyExtVersion) {
+        exclude group: 'javax.ws.rs'
+    }
     compile(group: 'org.glassfish.jersey.ext', name: 'jersey-bean-validation', version: jerseyExtVersion) {
+        exclude group: 'javax.ws.rs'
         exclude group: 'org.hibernate'
     }
 
@@ -76,20 +93,21 @@ dependencies {
     compile group: 'io.swagger', name: 'swagger-annotations', version: swaggerVersion
     compileClasspath group: 'io.swagger', name: 'swagger-hibernate-validations', version: swaggerVersion
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.7.22'
-    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
+    testCompile group: 'org.apache.tomcat', name: 'tomcat-servlet-api', version: tomcatVersion
+
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
+    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
+
+    testCompile group: 'org.mockito', name: 'mockito-core', version: mockitoVersion
+    testCompile group: 'org.assertj', name: 'assertj-core', version: assertJVersion
 
 }
 
-sonarqube {
-    properties {
-        property "sonar.junit.reportPath", file("$buildDir/jacoco")
-    }
-}
+def junitPlatformTestTask = (JavaExec) project.tasks.getByName('junitPlatformTest')
 
 jacoco {
-    toolVersion = '0.7.6.201602180812'
+    applyTo(junitPlatformTestTask)
+    toolVersion = '0.8.0'
 }
 
 test {
@@ -101,30 +119,42 @@ test {
     }
 }
 
-jacocoTestReport {
-    reports {
-        csv.enabled false
-        html.enabled true
-        html.destination "${buildDir}/jacoco/html"
-        xml.enabled true
-        xml.destination "${buildDir}/reports/jacoco/report.xml"
+sonarqube {
+    properties {
+        property "sonar.junit.reportPath", file("build/test-results")
+        property "sonar.jacoco.reportPaths", file("build/jacoco/junitPlatformTest.exec")
     }
 }
 
-jacocoTestCoverageVerification {
+project.task(type: JacocoReport, "jacocoJupTestReport") {
+
+    executionData(junitPlatformTestTask)
+    sourceSets(sourceSets.main)
+
+    sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+    classDirectories = files(sourceSets.main.output)
+
+    reports {
+        html.destination "${buildDir}/jacoco/html"
+    }
+
+}
+
+project.task(type: JacocoCoverageVerification, "jacocoTestVerify") {
+
+    executionData(junitPlatformTestTask)
+
+    sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+    classDirectories = files(sourceSets.main.output)
+
     violationRules {
         rule {
             limit {
-                minimum = 0.8
+                minimum = 0.9
             }
         }
     }
+
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-}
+check.dependsOn jacocoJupTestReport

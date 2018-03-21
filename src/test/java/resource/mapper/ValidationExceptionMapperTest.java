@@ -1,21 +1,20 @@
 package resource.mapper;
 
 import com.anigenero.microservice.resource.mapper.ValidationExceptionMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class ValidationExceptionMapperTest {
+class ValidationExceptionMapperTest {
 
     private ValidationExceptionMapper validationExceptionMapper;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.validationExceptionMapper = new ValidationExceptionMapper();
     }
 
     @Test
-    public void toResponse() throws Exception {
-
+    void toResponse() {
 
 
     }

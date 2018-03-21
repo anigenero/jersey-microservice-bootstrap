@@ -36,6 +36,7 @@ public class DefaultResponse<T extends Serializable> implements Serializable {
         return status.getStatusCode();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setStatus(Response.Status status) {
         this.status = status;
     }

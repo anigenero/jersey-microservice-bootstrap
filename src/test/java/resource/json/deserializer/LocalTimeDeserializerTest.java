@@ -1,17 +1,17 @@
 package resource.json.deserializer;
 
 import com.anigenero.microservice.resource.json.deserializer.LocalTimeDeserializer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import resource.json.DeserializerBase;
 
 import java.time.LocalTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class LocalTimeDeserializerTest extends DeserializerBase<LocalTimeDeserializer, LocalTime> {
+class LocalTimeDeserializerTest extends DeserializerBase<LocalTimeDeserializer, LocalTime> {
 
     @Test
-    public void deserializeString() throws Exception {
+    void deserializeString() throws Exception {
 
         final String json = "{ \"value\" : \"12:34:01\" }";
         LocalTime localTime = deserialize(json);
@@ -23,7 +23,7 @@ public class LocalTimeDeserializerTest extends DeserializerBase<LocalTimeDeseria
     }
 
     @Test
-    public void deserializeNanoDay() throws Exception {
+    void deserializeNanoDay() throws Exception {
 
         final String json = "{ \"value\" : 57272 }";
         LocalTime localTime = deserialize(json);

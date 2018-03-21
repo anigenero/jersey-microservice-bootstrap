@@ -1,0 +1,17 @@
+Configuration:
+  name: Default
+  status: off
+
+  Appenders:
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: "%d{HH:mm:ss.SSS} [%level] %logger - %msg %ex %n"
+
+  Loggers:
+    AsyncRoot:
+      level: off
+      AppenderRef:
+        - ref: Console
+          level: off

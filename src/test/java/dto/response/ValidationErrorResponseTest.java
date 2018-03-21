@@ -1,17 +1,17 @@
 package dto.response;
 
 import com.anigenero.microservice.model.response.ValidationErrorResponse;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class ValidationErrorResponseTest {
+class ValidationErrorResponseTest {
 
     @Test
-    public void test() throws Exception {
+    void test() {
 
         final ArrayList<String> violations = new ArrayList<>();
         violations.add("Test validation error");

@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class PaginationRequest implements Serializable {
 
-    public static final Integer DEFAULT_SIZE = 10;
+    private static final Integer DEFAULT_SIZE = 10;
 
     @QueryParam("page")
     private Integer page;
@@ -42,6 +42,7 @@ public class PaginationRequest implements Serializable {
         this.size = size;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean isGetAll() {
         return getAll;
     }

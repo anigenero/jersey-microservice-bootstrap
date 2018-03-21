@@ -6,6 +6,6 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 install:
-  - ./gradlew clean build jacocoTestReport jacocoTestCoverageVerification
+  - ./gradlew clean build jacocoTestVerify generateSwaggerDocumentation
 after_success:
   - bash <(curl -s https://codecov.io/bash)

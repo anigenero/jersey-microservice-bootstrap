@@ -1,7 +1,7 @@
 package resource.json.deserializer;
 
 import com.anigenero.microservice.resource.json.deserializer.LocalDateDeserializer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import resource.json.DeserializerBase;
 
 import java.time.LocalDate;
@@ -9,10 +9,10 @@ import java.time.Month;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class LocalDateDeserializerTest extends DeserializerBase<LocalDateDeserializer, LocalDate> {
+class LocalDateDeserializerTest extends DeserializerBase<LocalDateDeserializer, LocalDate> {
 
     @Test
-    public void deserializeString() throws Exception {
+    void deserializeString() throws Exception {
 
         final String json = "{ \"value\" : \"2017-04-16\" }";
         LocalDate localDate = deserialize(json);
@@ -24,7 +24,7 @@ public class LocalDateDeserializerTest extends DeserializerBase<LocalDateDeseria
     }
 
     @Test
-    public void deserializeEpochDay() throws Exception {
+    void deserializeEpochDay() throws Exception {
 
         final String json = "{ \"value\" : 17272 }";
         LocalDate localDate = deserialize(json);
@@ -36,7 +36,7 @@ public class LocalDateDeserializerTest extends DeserializerBase<LocalDateDeseria
     }
 
     @Test
-    public void testNullValue() throws Exception {
+    void testNullValue() throws Exception {
 
         final String json = "{ \"value\" : null }";
         LocalDate localDate = deserialize(json);

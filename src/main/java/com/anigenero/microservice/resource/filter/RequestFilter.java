@@ -15,13 +15,12 @@ public class RequestFilter implements Filter {
     private static final Long WARN_REQUEST_TIME_MS = 1000L;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         // stub
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
 
         // get the URI we are accessing
         final String uri = ((HttpServletRequest) request).getRequestURI();

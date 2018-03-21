@@ -4,7 +4,7 @@ import com.anigenero.microservice.resource.json.serializer.LocalTimeSerializer;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import resource.json.SerializerBase;
 
 import java.io.StringWriter;
@@ -13,10 +13,10 @@ import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LocalTimeSerializerTest extends SerializerBase<LocalTimeSerializer, LocalTime> {
+class LocalTimeSerializerTest extends SerializerBase<LocalTimeSerializer, LocalTime> {
 
     @Test
-    public void serialize() throws Exception {
+    void serialize() throws Exception {
 
         Writer jsonWriter = new StringWriter();
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(jsonWriter);

@@ -1,14 +1,14 @@
 package dto.response;
 
 import com.anigenero.microservice.model.response.ErrorResponse;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class ErrorResponseTest {
+class ErrorResponseTest {
 
     @Test
-    public void testErrorResponse() {
+    void testErrorResponse() {
 
         final String errorMessage = "message";
 
